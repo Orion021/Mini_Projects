@@ -1,0 +1,59 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>DHT11 Live Data</title> 
+  <style> 
+    body{ 
+      margin:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center; 
+      font-family:Arial,sans-serif;color:#333; 
+      background:linear-gradient(135deg,#e0f7fa,#e1bee7); 
+    } 
+    h1{margin-bottom:20px;color:#212121;} 
+    .card{ 
+      background:#fff;padding:20px 30px;border-radius:15px; 
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center; 
+    } 
+    .row{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;} 
+    .box{ 
+      background:#f5f5f5;border-radius:12px;padding:15px;width:150px; 
+      box-shadow:inset 0 0 5px rgba(0,0,0,0.05); 
+    } 
+    .label{color:#555;font-size:.95rem;} 
+    .value{color:#0277bd;font-size:1.8rem;font-weight:600;margin:8px 0;} 
+    p{margin-top:15px;font-size:.9rem;color:#616161;} 
+  </style> 
+</head> 
+<body> 
+  <h1>DHT11 Live Temperature & Humidity</h1> 
+  <div class="card"> 
+    <div class="row"> 
+      <div class="box"> 
+        <div class="label">Temperature</div> 
+        <div id="temp" class="value">--</div> 
+        <div class="label">°C</div> 
+      </div> 
+      <div class="box"> 
+        <div class="label">Humidity</div> 
+        <div id="hum" class="value">--</div> 
+        <div class="label">%</div> 
+      </div> 
+    </div> 
+    <p>Last updated: <span id="time">--</span></p> 
+  </div> 
+  <script> 
+    async function updateData(){ 
+      try{ 
+        const r=await fetch('/api/data'); 
+        const d=await r.json(); 
+        temp.textContent=d.temperature??'--'; 
+        hum.textContent=d.humidity??'--'; 
+        time.textContent=d.time??'--'; 
+      }catch(e){console.log(e);} 
+    } 
+    updateData(); 
+    setInterval(updateData,2000); 
+  </script> 
+</body> 
+</html>
